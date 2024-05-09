@@ -11,6 +11,10 @@ class UserTableRepository (application: Application) {
 
     val allUsers: Flow<List<UserTable>> = subjectDao.getAllUser()
 
+    suspend fun getUserByName(name: String): UserTable? {
+        return subjectDao.getUserByName(name)
+    }
+
     suspend fun insert(subject: UserTable) {
         subjectDao.insertUser(subject)
     }

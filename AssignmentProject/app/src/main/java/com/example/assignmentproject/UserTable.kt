@@ -12,8 +12,5 @@ data class UserTable(
     val uid: Int = 0,
     val name: String,
     val password: String,
-    val type: String,
-    val gender: String,
-    val weight: Double,
-    val height: Double,
+    val gender: String
 )

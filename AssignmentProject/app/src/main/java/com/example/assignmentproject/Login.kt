@@ -2,6 +2,7 @@ package com.example.assignmentproject
 
 import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
@@ -21,14 +22,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -59,13 +57,16 @@ import kotlinx.coroutines.tasks.await
 
 @Composable
 fun Login(navController1: NavHostController, navViewModel: NavigationViewModel, userTableViewModel: UserTableViewModel) {
-    var username by remember { mutableStateOf("") }
+    var userName by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    // val LightSkyBlue = Color(0xFF87CEEB)
 
+    // Define a variable to hold the current user
     var user by remember { mutableStateOf(Firebase.auth.currentUser) }
+    // Remember launcher for Firebase authentication
     val launcher = rememberFirebaseAuthLauncher(onAuthComplete = { result -> user = result.user}, onAuthError = { user = null})
+    // Retrieve Google client ID from resources
     val token = stringResource(id = R.string.client_id)
+
     val context = LocalContext.current
 
     Column(
@@ -79,19 +80,22 @@ fun Login(navController1: NavHostController, navViewModel: NavigationViewModel, 
             Text(
                 text = "Log in",
                 style = MaterialTheme.typography.displayMedium,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 66.dp)
             )
 
             // Sign in with Google button
             Button(
                 onClick = {
+                    // Configure Google sign-in options
                     val gso = GoogleSignInOptions
                         .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                         .requestIdToken(token)
                         .requestEmail()
                         .build()
 
+                    // Create Google sign-in client
                     val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                    // Launch sign-in intent
                     launcher.launch(googleSignInClient.signInIntent)
                 },
                 shape = RoundedCornerShape(15.dp),
@@ -110,7 +114,7 @@ fun Login(navController1: NavHostController, navViewModel: NavigationViewModel, 
                 Text(
                     text = "Sign in with Google",
                     modifier = Modifier.padding(1.dp),
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.primary,
                     fontFamily = FontFamily.SansSerif,
                     fontSize = 15.sp,
                     letterSpacing = 0.1.em
@@ -147,9 +151,9 @@ fun Login(navController1: NavHostController, navViewModel: NavigationViewModel, 
 
             // Username field
             OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
-                label = { Text("Username") },
+                value = userName,
+                onValueChange = { userName = it },
+                label = { Text("User Name") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
@@ -168,17 +172,35 @@ fun Login(navController1: NavHostController, navViewModel: NavigationViewModel, 
             // Log in button
             Button(
                 onClick = {
-
-                    navController1.navigate("BottomNavigationBar") {
-                        // popUpTo is used to pop up to a given destination before navigating
-                        popUpTo(navController1.graph.findStartDestination().id) {
-                            saveState = true
+                    if(userName != "" && password != ""){
+                        val retrivedUser = userTableViewModel.getUserByName(userName)
+                        if(retrivedUser == null || retrivedUser.password != password){
+                            Toast.makeText(
+                                context,
+                                "The user cannot be found or the password is incorrect",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }else{
+                            navViewModel.setName(userName)
+                            navController1.navigate("BottomNavigationBar") {
+                                // popUpTo is used to pop up to a given destination before navigating
+                                popUpTo(navController1.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                //at most one copy of a given destination on the top of the back stack
+                                launchSingleTop = true
+                                // this navigation action should restore any state previously saved
+                                restoreState = true
+                            }
                         }
-                        //at most one copy of a given destination on the top of the back stack
-                        launchSingleTop = true
-                        // this navigation action should restore any state previously saved
-                        restoreState = true
+                    }else{
+                        Toast.makeText(
+                            context,
+                            "Invalid user name or password",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
+
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -211,10 +233,7 @@ fun Login(navController1: NavHostController, navViewModel: NavigationViewModel, 
             val newUser = UserTable(
                 name = navViewModel.name.value,
                 password = password,
-                type = "user",
                 gender = "Others",
-                weight = 0.0,
-                height = 0.0
             )
             userTableViewModel.insertSubject(newUser)
             navController1.navigate("BottomNavigationBar") {
@@ -231,28 +250,34 @@ fun Login(navController1: NavHostController, navViewModel: NavigationViewModel, 
     }
 }
 
+// Function to create a launcher for Firebase authentication
 @Composable
 fun rememberFirebaseAuthLauncher(
     onAuthComplete: (AuthResult) -> Unit,
     onAuthError: (ApiException) -> Unit
 ): ManagedActivityResultLauncher<Intent, ActivityResult> {
-
+    // Remember coroutine scope
     val scope = rememberCoroutineScope()
 
+    // Return a launcher for activity result
     return rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()){
             result ->
+        // Get signed-in account from the result
         val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
         try{
-
+            // Get signed-in account from the result
             val account = task.getResult(ApiException::class.java)!!
             Log.d("GoogleAuth", "account $account")
 
+            // Get Google sign-in credentials
             val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
             scope.launch {
+                // Sign in with Firebase using Google credentials
                 val authResult = Firebase.auth.signInWithCredential(credential).await()
+
+                // Call the callback for successful authentication
                 onAuthComplete(authResult)
             }
-
         }catch (e: ApiException){
             Log.d("GoogleAuth", e.toString())
             onAuthError(e)
