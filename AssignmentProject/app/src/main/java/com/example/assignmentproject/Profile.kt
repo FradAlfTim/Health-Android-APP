@@ -14,9 +14,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,13 +37,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 @Composable
 fun Profile(navController2: NavHostController, navViewModel: NavigationViewModel) {
-    val height = navViewModel.height.value
-    val weight = navViewModel.weight.value
+    val height by remember { mutableDoubleStateOf(0.0) }
+    val weight by remember { mutableDoubleStateOf(0.0) }
     val userName = navViewModel.name.value
     var bmi by remember { mutableDoubleStateOf(0.0) }
     val lightSkyBlue = Color(0xFF87CEEB)
@@ -172,6 +180,26 @@ fun Profile(navController2: NavHostController, navViewModel: NavigationViewModel
                         Text(text = "BMI: $bmi", modifier = Modifier.weight(1f).padding(vertical = 14.dp))
                     }
                 }
+                /*Button(
+                    onClick = {
+                        Firebase.auth.signOut()
+                        user = null
+                    },
+                    shape = RoundedCornerShape(15.dp),
+                    modifier = Modifier
+                        .height(50.dp)
+                        .padding(5.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+                ) {
+                    Text(
+                        text = "Sign out",
+                        modifier = Modifier.padding(1.dp),
+                        color = Color.Black,
+                        fontFamily = FontFamily.SansSerif,
+                        fontSize = 15.sp,
+                        letterSpacing = 0.1.em
+                    )
+                }*/
             }
         }
     }

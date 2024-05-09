@@ -44,7 +44,7 @@ fun LoginNavigation(navViewModel: NavigationViewModel, userTableViewModel: UserT
         startDestination = "Login",
     ) {
         composable("Login") {
-            Login(navController1, navViewModel)
+            Login(navController1, navViewModel, userTableViewModel)
         }
         composable("SignUp") {
             SignUp(navController1, navViewModel, userTableViewModel)

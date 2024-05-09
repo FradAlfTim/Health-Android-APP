@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     //add ksp plugin for room
     id("com.google.devtools.ksp")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -59,9 +60,13 @@ dependencies {
     //Add the ksp and Room and LiveData
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
+    implementation("com.google.firebase:firebase-auth:23.0.0")
     ksp("androidx.room:room-compiler:2.6.1")
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.1")
+
+    // Add the dependency for the Google Play services library (Google sign in)
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 
     implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
