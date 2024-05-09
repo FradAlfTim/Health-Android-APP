@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
@@ -64,9 +65,16 @@ fun Profile(navController2: NavHostController, navViewModel: NavigationViewModel
                     .padding(16.dp),
                 verticalArrangement = Arrangement.Top
             ) {
-                Spacer(modifier = Modifier.height(100.dp))
+                Text(text = "Profile",
+                    // refers to a predefined text style provided by the Material Design theme. It typically
+                    // represents a large head line style suitable for headings.
+                    style = MaterialTheme.typography.headlineLarge,
+                    // Center and add vertical spacing
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 26.dp),
+                    textAlign = TextAlign.Center)
 
-                // User profile section
                 Box(
                     modifier = Modifier
                         .height(100.dp)
@@ -78,9 +86,9 @@ fun Profile(navController2: NavHostController, navViewModel: NavigationViewModel
                         contentDescription = "User Avatar",
                         tint = Color.LightGray,
                         modifier = Modifier
-                            .size(150.dp)
+                            .size(100.dp)
                             .clip(CircleShape)
-                            .border(width = 2.dp, color = Color.White, shape = CircleShape)
+                            .border(width = 2.dp, color = Color.White, shape = CircleShape),
                     )
                 }
 
@@ -95,8 +103,8 @@ fun Profile(navController2: NavHostController, navViewModel: NavigationViewModel
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 5.dp).clickable {  },
-                    color = lightBlue
+                        .padding(vertical = 5.dp),
+                    color = Color.Transparent
                 ) {
                     Row(
                         modifier = Modifier
@@ -104,14 +112,14 @@ fun Profile(navController2: NavHostController, navViewModel: NavigationViewModel
                             .padding(5.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "User Name: $userName", modifier = Modifier.weight(1f).padding(vertical = 14.dp))
+                        Text(text = "User Name:  $userName", modifier = Modifier.weight(1f).padding(vertical = 14.dp))
                     }
                 }
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 5.dp),
-                    color = lightBlue
+                    color = Color.Transparent
                 ) {
                     Row(
                         modifier = Modifier
@@ -133,7 +141,7 @@ fun Profile(navController2: NavHostController, navViewModel: NavigationViewModel
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 5.dp),
-                    color = lightBlue
+                    color = Color.Transparent
                 ) {
                     Row(
                         modifier = Modifier
@@ -155,7 +163,7 @@ fun Profile(navController2: NavHostController, navViewModel: NavigationViewModel
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 5.dp),
-                    color = lightBlue
+                    color = Color.Transparent
                 ) {
                     Row(
                         modifier = Modifier
@@ -166,7 +174,8 @@ fun Profile(navController2: NavHostController, navViewModel: NavigationViewModel
                         if(height != 0.0) {
                             bmi = weight / height / height
                         }
-                        Text(text = "BMI: $bmi", modifier = Modifier.weight(1f).padding(vertical = 14.dp))
+                        val formattedBMI = String.format("%.2f", bmi)
+                        Text(text = "BMI:  $formattedBMI", modifier = Modifier.weight(1f).padding(vertical = 14.dp))
                     }
                 }
             }

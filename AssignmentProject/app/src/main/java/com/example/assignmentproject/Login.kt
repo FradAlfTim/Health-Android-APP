@@ -80,7 +80,7 @@ fun Login(navController1: NavHostController, navViewModel: NavigationViewModel, 
             Text(
                 text = "Log in",
                 style = MaterialTheme.typography.displayMedium,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 66.dp)
             )
 
             // Sign in with Google button
@@ -181,6 +181,7 @@ fun Login(navController1: NavHostController, navViewModel: NavigationViewModel, 
                                 Toast.LENGTH_SHORT
                             ).show()
                         }else{
+                            navViewModel.setName(userName)
                             navController1.navigate("BottomNavigationBar") {
                                 // popUpTo is used to pop up to a given destination before navigating
                                 popUpTo(navController1.graph.findStartDestination().id) {
