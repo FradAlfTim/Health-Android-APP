@@ -30,6 +30,7 @@ import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 
@@ -44,6 +45,7 @@ fun SignUp(navController1: NavHostController, navViewModel: NavigationViewModel,
     var isExpanded by remember { mutableStateOf(false) }
     var selectedGender by remember { mutableStateOf(genders[0]) }
     val context = LocalContext.current
+    val userTableViewModel: UserTableViewModel = viewModel()
 
     Column(
         modifier = Modifier
@@ -146,7 +148,13 @@ fun SignUp(navController1: NavHostController, navViewModel: NavigationViewModel,
                         val newUser = UserTable(
                             name = userName,
                             password = password,
-                            gender = selectedGender
+                            gender = selectedGender,
+                            steps = "3745",
+                            calories = "300",
+                            sleep = "8h34m",
+                            exercise = "2h47m",
+                            bmi = "120"
+
                         )
                         userTableViewModel.insertSubject(newUser)
                         navController1.navigate("Login") {
