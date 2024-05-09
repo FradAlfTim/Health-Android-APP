@@ -12,5 +12,11 @@ data class UserTable(
     val uid: Int = 0,
     val name: String,
     val password: String,
-    val gender: String
+    val gender: String,
+    var steps: String,
+    var calories: String,
+    var sleep: String,
+    var exercise: String,
+    var bmi: String
+
 )

@@ -24,4 +24,6 @@ interface UserTableDAO {
 
     @Delete
     suspend fun deleteUser(subject: UserTable)
+
+
 }

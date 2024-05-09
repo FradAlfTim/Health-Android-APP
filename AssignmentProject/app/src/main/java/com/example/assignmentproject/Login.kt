@@ -234,6 +234,11 @@ fun Login(navController1: NavHostController, navViewModel: NavigationViewModel, 
                 name = navViewModel.name.value,
                 password = password,
                 gender = "Others",
+                steps = "3745",
+                calories = "300",
+                sleep = "8h34m",
+                exercise = "2h47m",
+                bmi = "120"
             )
             userTableViewModel.insertSubject(newUser)
             navController1.navigate("BottomNavigationBar") {
