@@ -7,6 +7,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class UserTableViewModel(application: Application) : AndroidViewModel(application) {
     private val cRepository: UserTableRepository
@@ -14,6 +15,12 @@ class UserTableViewModel(application: Application) : AndroidViewModel(applicatio
         cRepository = UserTableRepository(application)
     }
     val allUsers: LiveData<List<UserTable>> = cRepository.allUsers.asLiveData()
+
+    fun getUserByName(name: String): UserTable? {
+        return runBlocking {
+            cRepository.getUserByName(name)
+        }
+    }
     fun insertSubject(subject: UserTable) = viewModelScope.launch(Dispatchers.IO) {
         cRepository.insert(subject)
     }

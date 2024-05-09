@@ -1,5 +1,6 @@
 package com.example.assignmentproject
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,17 +18,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 
@@ -41,10 +40,7 @@ fun SignUp(navController1: NavHostController, navViewModel: NavigationViewModel,
     val genders = listOf("Male", "Female", "Others")
     var isExpanded by remember { mutableStateOf(false) }
     var selectedGender by remember { mutableStateOf(genders[0]) }
-    var weight by remember { mutableDoubleStateOf (0.0) }
-    var hight by remember { mutableDoubleStateOf (0.0) }
-    var isSignUpSeccess by remember {mutableStateOf(false)}
-    val userTableViewModel: UserTableViewModel = viewModel()
+    val context = LocalContext.current
 
     Surface(
         modifier = Modifier
@@ -64,6 +60,7 @@ fun SignUp(navController1: NavHostController, navViewModel: NavigationViewModel,
                     .fillMaxWidth()
                     .padding(vertical = 26.dp),
                 textAlign = TextAlign.Center)
+
             OutlinedTextField(
                 value = userName,
                 onValueChange = { userName = it },
@@ -72,6 +69,7 @@ fun SignUp(navController1: NavHostController, navViewModel: NavigationViewModel,
                     .fillMaxWidth()
                     .padding(bottom = 18.dp)
             )
+
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -80,6 +78,7 @@ fun SignUp(navController1: NavHostController, navViewModel: NavigationViewModel,
                     .fillMaxWidth()
                     .padding(bottom = 18.dp)
             )
+
             OutlinedTextField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
@@ -88,6 +87,7 @@ fun SignUp(navController1: NavHostController, navViewModel: NavigationViewModel,
                     .fillMaxWidth()
                     .padding(bottom = 18.dp)
             )
+
             ExposedDropdownMenuBox(
                 expanded = isExpanded,
                 onExpandedChange = { isExpanded = it },
@@ -125,43 +125,40 @@ fun SignUp(navController1: NavHostController, navViewModel: NavigationViewModel,
                     }
                 }
             }
-            OutlinedTextField(
-                value = weight.toString(),
-                onValueChange = { newWeight:String -> weight = newWeight.toDoubleOrNull() ?: weight },
-                label = { Text("Weight (kg)") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 18.dp)
-            )
-            OutlinedTextField(
-                value = hight.toString(),
-                onValueChange = { newHight:String -> hight = newHight.toDoubleOrNull() ?: hight },
-                label = { Text("Hight (Meters)") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 18.dp)
-            )
+
             Button(
                 onClick = {
-                    val newUser = UserTable(
-                        name = userName,
-                        password = password,
-                        type = "user",
-                        gender = selectedGender,
-                        weight = weight,
-                        height = hight
-                    )
-                    userTableViewModel.insertSubject(newUser)
-                    isSignUpSeccess=true
-                    navController1.navigate("Login") {
-                        // popUpTo is used to pop up to a given destination before navigating
-                        popUpTo(navController1.graph.findStartDestination().id) {
-                            saveState = true
+                    if(userName != "" && password != ""){
+                        if(userTableViewModel.getUserByName(userName) == null && password == confirmPassword){
+                            val newUser = UserTable(
+                                name = userName,
+                                password = password,
+                                gender = selectedGender
+                            )
+                            userTableViewModel.insertSubject(newUser)
+                            navController1.navigate("Login") {
+                                // popUpTo is used to pop up to a given destination before navigating
+                                popUpTo(navController1.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                //at most one copy of a given destination on the top of the back stack
+                                launchSingleTop = true
+                                // this navigation action should restore any state previously saved
+                                restoreState = true
+                            }
+                        }else{
+                            Toast.makeText(
+                                context,
+                                "Invalid user name or confirm password",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-                        //at most one copy of a given destination on the top of the back stack
-                        launchSingleTop = true
-                        // this navigation action should restore any state previously saved
-                        restoreState = true
+                    }else{
+                        Toast.makeText(
+                            context,
+                            "You must fill in user name and password.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 },
                 modifier = Modifier

@@ -14,22 +14,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -37,18 +31,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
 
 @Composable
 fun Profile(navController2: NavHostController, navViewModel: NavigationViewModel) {
-    val height by remember { mutableDoubleStateOf(0.0) }
-    val weight by remember { mutableDoubleStateOf(0.0) }
+    var height by remember { mutableDoubleStateOf(0.0) }
+    var weight by remember { mutableDoubleStateOf(0.0) }
     val userName = navViewModel.name.value
     var bmi by remember { mutableDoubleStateOf(0.0) }
     val lightSkyBlue = Color(0xFF87CEEB)
@@ -64,8 +53,8 @@ fun Profile(navController2: NavHostController, navViewModel: NavigationViewModel
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(lightSkyBlue, Color.White), // 设置渐变色
-                        startY = 200f, // 设置渐变的起始位置
-                        endY = 800f // 设置渐变的结束位置
+                        startY = 200f, // Set the starting position of the gradient
+                        endY = 800f // Set the end position of the gradient
                     )
                 )
         ) {
@@ -77,10 +66,10 @@ fun Profile(navController2: NavHostController, navViewModel: NavigationViewModel
             ) {
                 Spacer(modifier = Modifier.height(100.dp))
 
-                // User profile picture section
+                // User profile section
                 Box(
                     modifier = Modifier
-                        .height(150.dp)
+                        .height(100.dp)
                         .fillMaxWidth(),
                     contentAlignment = Alignment.TopCenter
                 ) {
@@ -93,14 +82,6 @@ fun Profile(navController2: NavHostController, navViewModel: NavigationViewModel
                             .clip(CircleShape)
                             .border(width = 2.dp, color = Color.White, shape = CircleShape)
                     )
-                    FloatingActionButton(
-                        onClick = { /* Handle click */ },
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(10.dp)
-                    ) {
-                        Text(text = "Edit")
-                    }
                 }
 
                 // User profile details section
@@ -138,10 +119,14 @@ fun Profile(navController2: NavHostController, navViewModel: NavigationViewModel
                             .padding(5.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "Weight: $weight", modifier = Modifier.weight(1f).padding(vertical = 14.dp))
-                        IconButton(onClick = {}) {
-                            Icon(Icons.Default.Edit, contentDescription = "Edit")
-                        }
+                        OutlinedTextField(
+                            value = weight.toString(),
+                            onValueChange = { newWeight:String -> weight = newWeight.toDoubleOrNull() ?: weight },
+                            label = { Text("Weight (kg)") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 18.dp)
+                        )
                     }
                 }
                 Surface(
@@ -156,10 +141,14 @@ fun Profile(navController2: NavHostController, navViewModel: NavigationViewModel
                             .padding(5.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "Height: $height", modifier = Modifier.weight(1f).padding(vertical = 14.dp))
-                        IconButton(onClick = {}) {
-                            Icon(Icons.Default.Edit, contentDescription = "Edit")
-                        }
+                        OutlinedTextField(
+                            value = height.toString(),
+                            onValueChange = { newHeight:String -> height = newHeight.toDoubleOrNull() ?: height },
+                            label = { Text("Hight (Meters)") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 18.dp)
+                        )
                     }
                 }
                 Surface(
@@ -180,26 +169,6 @@ fun Profile(navController2: NavHostController, navViewModel: NavigationViewModel
                         Text(text = "BMI: $bmi", modifier = Modifier.weight(1f).padding(vertical = 14.dp))
                     }
                 }
-                /*Button(
-                    onClick = {
-                        Firebase.auth.signOut()
-                        user = null
-                    },
-                    shape = RoundedCornerShape(15.dp),
-                    modifier = Modifier
-                        .height(50.dp)
-                        .padding(5.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.White)
-                ) {
-                    Text(
-                        text = "Sign out",
-                        modifier = Modifier.padding(1.dp),
-                        color = Color.Black,
-                        fontFamily = FontFamily.SansSerif,
-                        fontSize = 15.sp,
-                        letterSpacing = 0.1.em
-                    )
-                }*/
             }
         }
     }

@@ -13,6 +13,9 @@ interface UserTableDAO {
     @Query("SELECT * FROM users")
     fun getAllUser(): Flow<List<UserTable>>
 
+    @Query("SELECT * FROM users WHERE name = :name")
+    suspend fun getUserByName(name: String): UserTable?
+
     @Insert
     suspend fun insertUser(subject: UserTable)
 
