@@ -27,13 +27,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUp(navController1: NavHostController, navViewModel: NavigationViewModel) {
+fun SignUp(navController1: NavHostController, navViewModel: NavigationViewModel, userTableViewModel: UserTableViewModel) {
     var userName by remember { mutableStateOf ("") }
     var password by remember { mutableStateOf ("") }
     var confirmPassword by remember { mutableStateOf ("") }
@@ -43,6 +44,7 @@ fun SignUp(navController1: NavHostController, navViewModel: NavigationViewModel)
     var weight by remember { mutableDoubleStateOf (0.0) }
     var hight by remember { mutableDoubleStateOf (0.0) }
     var isSignUpSeccess by remember {mutableStateOf(false)}
+    val userTableViewModel: UserTableViewModel = viewModel()
 
     Surface(
         modifier = Modifier
@@ -141,6 +143,15 @@ fun SignUp(navController1: NavHostController, navViewModel: NavigationViewModel)
             )
             Button(
                 onClick = {
+                    val newUser = UserTable(
+                        name = userName,
+                        password = password,
+                        type = "user",
+                        gender = selectedGender,
+                        weight = weight,
+                        height = hight
+                    )
+                    userTableViewModel.insertSubject(newUser)
                     isSignUpSeccess=true
                     navController1.navigate("Login") {
                         // popUpTo is used to pop up to a given destination before navigating

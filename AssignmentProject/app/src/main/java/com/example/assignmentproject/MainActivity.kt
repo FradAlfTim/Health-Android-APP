@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.assignmentproject.ui.theme.AssignmentProjectTheme
 
 class MainActivity : ComponentActivity() {
+    private val userTableViewModel: UserTableViewModel by viewModels()
     private val viewModel: NavigationViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +28,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginNavigation(viewModel)
+                    LoginNavigation(viewModel, userTableViewModel)
                 }
             }
         }
@@ -35,7 +36,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun LoginNavigation(navViewModel: NavigationViewModel){
+fun LoginNavigation(navViewModel: NavigationViewModel, userTableViewModel: UserTableViewModel){
     val navController1 = rememberNavController()
 
     NavHost(
@@ -46,7 +47,7 @@ fun LoginNavigation(navViewModel: NavigationViewModel){
             Login(navController1, navViewModel)
         }
         composable("SignUp") {
-            SignUp(navController1, navViewModel)
+            SignUp(navController1, navViewModel, userTableViewModel)
         }
         composable("BottomNavigationBar") {
             BottomNavigationBar(navController1, navViewModel)
