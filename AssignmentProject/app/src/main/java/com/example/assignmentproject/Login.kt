@@ -114,7 +114,7 @@ fun Login(navController1: NavHostController, navViewModel: NavigationViewModel, 
                 Text(
                     text = "Sign in with Google",
                     modifier = Modifier.padding(1.dp),
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.primary,
                     fontFamily = FontFamily.SansSerif,
                     fontSize = 15.sp,
                     letterSpacing = 0.1.em

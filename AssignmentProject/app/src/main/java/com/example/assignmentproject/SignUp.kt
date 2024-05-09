@@ -129,7 +129,19 @@ fun SignUp(navController1: NavHostController, navViewModel: NavigationViewModel,
 
         Button(
             onClick = {
-                if(userName != "" && password != ""){
+                if(userName == "" || password == ""){
+                    Toast.makeText(
+                        context,
+                        "You must fill in user name and password.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }else if(userName.length < 2 || password.length < 7){
+                    Toast.makeText(
+                        context,
+                        "You must fill in user name and password.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else{
                     if(userTableViewModel.getUserByName(userName) == null && password == confirmPassword){
                         val newUser = UserTable(
                             name = userName,
@@ -150,16 +162,10 @@ fun SignUp(navController1: NavHostController, navViewModel: NavigationViewModel,
                     }else{
                         Toast.makeText(
                             context,
-                            "Invalid user name or confirm password",
+                            "Invalid user name or  password",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                }else{
-                    Toast.makeText(
-                        context,
-                        "You must fill in user name and password.",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
             },
             modifier = Modifier
