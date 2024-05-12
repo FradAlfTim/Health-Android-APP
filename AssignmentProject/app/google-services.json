@@ -22,7 +22,7 @@
           }
         },
         {
-          "client_id": "776709339863-mcjpim18uuhv764bacvf649ccmke3dtr.apps.googleusercontent.com",
+          "client_id": "#Chang to your own client-id#",
           "client_type": 3
         }
       ],
@@ -35,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "776709339863-mcjpim18uuhv764bacvf649ccmke3dtr.apps.googleusercontent.com",
+              "client_id": "#Chang to your own client-id#",
               "client_type": 3
             }
           ]
