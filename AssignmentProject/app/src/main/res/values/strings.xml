@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">AssignmentProject</string>
+    <string name="title_activity_records">RecordsActivity</string>
     <string name="client_id">776709339863-mcjpim18uuhv764bacvf649ccmke3dtr.apps.googleusercontent.com</string>
 </resources>

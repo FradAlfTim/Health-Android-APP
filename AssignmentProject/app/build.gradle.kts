@@ -62,7 +62,7 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("com.google.firebase:firebase-auth:23.0.0")
     ksp("androidx.room:room-compiler:2.6.1")
-    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.1")
 
     // Add the dependency for the Google Play services library (Google sign in)
@@ -84,4 +84,17 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+
+    val workVersion = "2.9.0"
+    implementation("androidx.work:work-runtime:${workVersion}")
+    implementation("androidx.work:work-runtime-ktx:${workVersion}")
+    implementation("androidx.work:work-multiprocess:${workVersion}")
+
+
+    val moshi_version = "1.15.0"
+    implementation("com.squareup.moshi:moshi:$moshi_version")
+    implementation("com.squareup.moshi:moshi-kotlin:$moshi_version")
+    implementation("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
 }
